@@ -10,7 +10,7 @@ module.exports.backup = incrementalBackup;
 module.exports.streambotBackup = streambot(incrementalBackup);
 module.exports.snapshot = require('./s3-snapshot');
 
-function replicate(event, callback) {
+function replicate(event, context, callback) {
     var replicaConfig = {
         accessKeyId: process.env.ReplicaAccessKeyId || undefined,
         secretAccessKey: process.env.ReplicaSecretAccessKey || undefined,
@@ -91,7 +91,7 @@ function replicate(event, callback) {
     })(replica.batchWriteItemRequests(params), 0);
 }
 
-function incrementalBackup(event, callback) {
+function incrementalBackup(event, context, callback) {
     var allRecords = event.Records.reduce(function(allRecords, action) {
         var id = JSON.stringify(action.dynamodb.Keys);
 
